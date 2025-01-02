@@ -5,6 +5,7 @@ import random
 import string
 from PIL import Image, ImageDraw, ImageFont, ImageColor
 import requests
+import os
 
 alg = "hello-world"
 variance = 0.0
@@ -43,16 +44,20 @@ for opt, arg in opts:
     elif opt in ("-V", "--variance"):
         print(f"Variance: {arg}")
         if arg == "random":
-            variance = random.randint(0, 99) / 100
+            variance = random.randint(0, 99) / 1000
             print(f"Random variance: {variance}")
         else:
             variance = arg
     elif opt in ("--fontColor"):
+        print(f"Font color: {arg}")
         font_color = ImageColor.getrgb(arg)
     elif opt in ("--backgroundColor"):
+        print(f"Background color: {arg}")
         background_color = ImageColor.getrgb(arg)
     elif opt in ("--output"):
         output = arg
+        if not os.path.exists(os.path.dirname(output)):
+            os.makedirs(os.path.dirname(output))
 
 font_size = 12
 font_char_width = 0.585 * font_size * (1 + variance)
@@ -90,7 +95,7 @@ def generate_message(alg: str = "hello-world"):
     
     if alg == "bible":
         print("Downloading bible...")
-        return requests.get("https://www.o-bible.com/download/kjv.txt").text.replace('\n', ' ')
+        return requests.get("https://www.o-bible.com/download/kjv.txt", verify=False).text.replace('\n', ' ')
     
     if alg.startswith("url="):
         url = alg.split("url=")[1]
