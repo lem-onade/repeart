@@ -11,6 +11,7 @@ variance = 0.0
 width_pixels = 500
 height_pixels = 500
 background_color = ImageColor.getrgb("black")
+output = "image.png"
 
 font_family = "Andale Mono"
 font_color = ImageColor.getrgb("white")
@@ -21,10 +22,11 @@ opts, _args = getopt.getopt(
     [
         "alg=",
         "width=",
-        "heigth=",
+        "height=",
         "variance=",
         "fontColor=",
         "backgroundColor=",
+        "output=",
     ]
 )
 
@@ -34,14 +36,14 @@ for opt, arg in opts:
         sys.exit()
     elif opt in ("-W", "--width"):
         width_pixels = int(arg)
-    elif opt in ("-H", "--heigth"):
+    elif opt in ("-H", "--height"):
         height_pixels = int(arg)
     elif opt in ("-A", "--alg"):
         alg = arg
     elif opt in ("-V", "--variance"):
         print(f"Variance: {arg}")
         if arg == "random":
-            variance = random.randint(0, 99) / 10000
+            variance = random.randint(0, 99) / 100
             print(f"Random variance: {variance}")
         else:
             variance = arg
@@ -49,6 +51,8 @@ for opt, arg in opts:
         font_color = ImageColor.getrgb(arg)
     elif opt in ("--backgroundColor"):
         background_color = ImageColor.getrgb(arg)
+    elif opt in ("--output"):
+        output = arg
 
 font_size = 12
 font_char_width = 0.585 * font_size * (1 + variance)
@@ -131,4 +135,4 @@ for i in range(len(text_lines)):
         text_lines[i], font=font, fill=font_color
     )
 
-image.save('image.png')
+image.save(output)
